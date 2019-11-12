@@ -1,11 +1,11 @@
 let express = require("express");
 let bodyParser = require("body-parser");
-let Cat = mongoose.model("Cat", carSchema);
-
 let mongoose = require("mongoose");
 
+let app = express();
+
 // connect to mongo db
-mongoose.connect("mongodb://localhost/NAMEOFDB");
+mongoose.connect("mongodb://localhost/demo");
 
 // sample schema
 let catSchema = new mongoose.Schema({
@@ -14,21 +14,45 @@ let catSchema = new mongoose.Schema({
     temperament: String
 });
 
+let Cat = mongoose.model("Cat", catSchema);
+
 // sample mongoose code
-let george = new Cat({
-    name: "George",
-    age: 11,
-    temperament: "Grouchy"
+// let george = new Cat({
+//     name: "George",
+//     age: 11,
+//     temperament: "Grouchy"
+// });
+
+// Add to DB
+// george.save((err, cat) => {
+//     if (err) {
+//         console.log("SOMETHING WENT WRONG!");
+//     } else {
+//         console.log("WE JUST SAVED A CAT TO THE DB!");
+//         console.log(cat)
+//     }
+// });
+
+Cat.find({}, (err, cats) => {
+    if (err) {
+        console.log("OH NO, ERROR!");
+    } else {
+        console.log(cats);
+    }
 });
 
-george.save((err, cat) => {
-    if (err) {
-        console.log("SOMETHING WENT WRONG!");
-    } else {
-        console.log("WE JUST SAVED A CAT TO THE DB!");
-        console.log(cat)
-    }
-})
+// Cat.create({
+//     name: "Snow White", 
+//     age: 15, 
+//     temperament: "Bland"
+// }, (err, cat) => {
+//     if (err) {
+//         console.log("SOMETHING WENT WRONG!");
+//     } else {
+//         console.log("WE JUST SAVED A CAT TO THE DB!");
+//         console.log(cat);
+//     }
+// });
 
 let campgrounds = [
     { name: "Salmon Creek", image: "https://d2s0f1q6r2lxto.cloudfront.net/pub/ProTips/wp-content/uploads/2017/04/how-to-set-up-a-campsite.jpg" },
