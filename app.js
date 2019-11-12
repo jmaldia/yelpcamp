@@ -1,8 +1,34 @@
 let express = require("express");
 let bodyParser = require("body-parser");
+let Cat = mongoose.model("Cat", carSchema);
+
 let mongoose = require("mongoose");
 
-let app = express();
+// connect to mongo db
+mongoose.connect("mongodb://localhost/NAMEOFDB");
+
+// sample schema
+let catSchema = new mongoose.Schema({
+    name: String,
+    age: Number,
+    temperament: String
+});
+
+// sample mongoose code
+let george = new Cat({
+    name: "George",
+    age: 11,
+    temperament: "Grouchy"
+});
+
+george.save((err, cat) => {
+    if (err) {
+        console.log("SOMETHING WENT WRONG!");
+    } else {
+        console.log("WE JUST SAVED A CAT TO THE DB!");
+        console.log(cat)
+    }
+})
 
 let campgrounds = [
     { name: "Salmon Creek", image: "https://d2s0f1q6r2lxto.cloudfront.net/pub/ProTips/wp-content/uploads/2017/04/how-to-set-up-a-campsite.jpg" },
