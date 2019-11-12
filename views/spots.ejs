@@ -1,0 +1,30 @@
+<% include partials/header %>
+
+    <div class="container">
+        <header class="jumbotron p-5">
+            <h1>Welcome to Rutherford Spots</h1>
+            <p>View our curated spots from all around Rutherford</p>
+            <p>
+                <a href="/spots/new" class="btn btn-primary btn-lg">
+                    Add New Spot
+                </a>
+            </p>
+        </header>
+    
+        <div class="row">
+            <% spots.forEach((spot) => { %>
+                <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                    <div class="card">
+                        <img src="<%= spot.image %>" class="card-img-top" alt="<%= spot.name %>">
+                        <div class="card-body">
+                            <h5 class="card-title"><%= spot.name %></h5>
+                            <p class="card-text"><%= spot.description %></p>
+                            <a href="/spots" class="btn btn-primary">Learn More</a>
+                        </div>
+                    </div>
+                </div>
+            <% }); %>
+        </div>
+    </div>
+    
+<% include partials/footer %>
