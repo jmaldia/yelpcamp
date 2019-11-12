@@ -1,67 +1,38 @@
-let express = require("express");
-let bodyParser = require("body-parser");
-let mongoose = require("mongoose");
-
+let express     = require("express");
+let bodyParser  = require("body-parser");
+let mongoose    = require("mongoose");
+// run server
 let app = express();
-
 // connect to mongo db
-mongoose.connect("mongodb://localhost/demo");
+mongoose.connect("mongodb://localhost/yelp_camp");
 
-// sample schema
-let catSchema = new mongoose.Schema({
+// SCHEMA SETUP
+let campgroundSchema = new mongoose.Schema({
     name: String,
-    age: Number,
-    temperament: String
+    image: String
 });
 
-let Cat = mongoose.model("Cat", catSchema);
+let Campground = mongoose.model("Campground", campgroundSchema);
 
-// sample mongoose code
-// let george = new Cat({
-//     name: "George",
-//     age: 11,
-//     temperament: "Grouchy"
-// });
-
-// Add to DB
-// george.save((err, cat) => {
-//     if (err) {
-//         console.log("SOMETHING WENT WRONG!");
-//     } else {
-//         console.log("WE JUST SAVED A CAT TO THE DB!");
-//         console.log(cat)
-//     }
-// });
-
-Cat.find({}, (err, cats) => {
+Campground.find({}, (err, campgrounds) => {
     if (err) {
         console.log("OH NO, ERROR!");
     } else {
-        console.log(cats);
+        console.log(campgrounds);
     }
 });
 
-// Cat.create({
-//     name: "Snow White", 
-//     age: 15, 
-//     temperament: "Bland"
-// }, (err, cat) => {
-//     if (err) {
-//         console.log("SOMETHING WENT WRONG!");
-//     } else {
-//         console.log("WE JUST SAVED A CAT TO THE DB!");
-//         console.log(cat);
-//     }
-// });
-
-let campgrounds = [
-    { name: "Salmon Creek", image: "https://d2s0f1q6r2lxto.cloudfront.net/pub/ProTips/wp-content/uploads/2017/04/how-to-set-up-a-campsite.jpg" },
-    { name: "Ganite Hill", image: "https://d2s0f1q6r2lxto.cloudfront.net/pub/ProTips/wp-content/uploads/2015/09/camp-checklist.jpg" }, 
-    { name: "Mountain Goat's Rest", image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTxpL78CTsOJLLaVOdA3Ftktb_iQ-0CSHHmn4omFZx1RZ3yd1so&s" },
-    { name: "Salmon Creek", image: "https://d2s0f1q6r2lxto.cloudfront.net/pub/ProTips/wp-content/uploads/2017/04/how-to-set-up-a-campsite.jpg" },
-    { name: "Ganite Hill", image: "https://d2s0f1q6r2lxto.cloudfront.net/pub/ProTips/wp-content/uploads/2015/09/camp-checklist.jpg" }, 
-    { name: "Mountain Goat's Rest", image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTxpL78CTsOJLLaVOdA3Ftktb_iQ-0CSHHmn4omFZx1RZ3yd1so&s" }
-]
+Campground.create({ 
+        name: "Ganite Hill", 
+        image: "https://d2s0f1q6r2lxto.cloudfront.net/pub/ProTips/wp-content/uploads/2015/09/camp-checklist.jpg" 
+    }, (err, campground) => {
+        if (err) {
+            console.log("SOMETHING WENT WRONG!", err);
+        } else {
+            console.log("WE JUST CREATED A CAMPGROUND TO THE DB!");
+            console.log(campground);
+        }
+    });
 
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({extended: true}));
