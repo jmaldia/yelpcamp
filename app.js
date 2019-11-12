@@ -64,9 +64,18 @@ app.get("/spots/new", (req, res) => {
     res.render("new")
 });
 
-app.get("/spots/:id", (res, req) => {
-
-    res.setEncoding("SHOW PAGE");
+app.get("/spots/:id", (req, res) => {
+    let id = req.params.id;
+    console.log(id)
+    Spot.findById(req.params.id, (err, foundSpot) => {
+        if (err) {
+            console.log("SOMETHING WENT WRONG!", err);
+        } else {
+            console.log(foundSpot)
+            res.render("show", { spot: foundSpot });
+        }
+    });
+    // res.render("show", { id: id })
 });
 
 // Tell express to listen for requests -start server 
