@@ -1,22 +1,19 @@
 let express     = require("express");
 let bodyParser  = require("body-parser");
 let mongoose    = require("mongoose");
+// require the model File(s)
+let Spot        = require("./models/spots");
+let Review      = require("./models/reviews");
+let seedDB      = require("./seeds"); // Seed file
 // run server
 let app = express();
 // connect to mongo db
 mongoose.connect("mongodb://localhost:27017/neighborhood_spots", {useNewUrlParser: true, useUnifiedTopology: true});
 
+seedDB();
+
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({extended: true}));
-
-// SCHEMA SETUP
-let spotSchema = new mongoose.Schema({
-    name: String,
-    image: String, 
-    description: String
-});
-
-let Spot = mongoose.model("Spot", spotSchema);
 
 // EXPRESS ROUTES
 app.get("/", (req, res) => {
@@ -29,7 +26,7 @@ app.get("/spots", (req, res) => {
         if (err) {
             console.log("OH NO, ERROR!");
         } else {
-            res.render("spots", { spots: allSpots });
+            res.render("spots/spots", { spots: allSpots });
             console.log(allSpots);
         }
     });
@@ -61,25 +58,42 @@ app.post("/spots", (req, res) => {
 });
 
 app.get("/spots/new", (req, res) => {
-    res.render("new")
+    res.render("spots/new")
 });
 
 app.get("/spots/:id", (req, res) => {
     let id = req.params.id;
     console.log(id)
-    Spot.findById(req.params.id, (err, foundSpot) => {
+    Spot.findById(req.params.id).populate("reviews").exec((err, foundSpot) => {
         if (err) {
             console.log("SOMETHING WENT WRONG!", err);
         } else {
             console.log(foundSpot)
-            res.render("show", { spot: foundSpot });
+            res.render("spots/show", { spot: foundSpot });
         }
     });
     // res.render("show", { id: id })
 });
 
+
+// ============== 
+// REVIEWS
+// ==============
+
+// Review Routes - form
+app.get("/spots/:id/reviews/new", (req, res) => {
+    Spot.findById(req.params.id, (err, spot) => {
+        if (err) {
+            console.log(err);
+        } else {
+            res.render("reviews/new", { spot: spot });
+        }
+    }) 
+});
+
+
 // Tell express to listen for requests -start server 
 // start your app with this command: PORT=3000 node app.js
 app.listen(process.env.PORT, process.env.IP, () =>{
-    console.log("Yelp Camp Server has started")
+    console.log("Yelp Camp Server has started");
 });

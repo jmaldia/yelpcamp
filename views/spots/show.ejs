@@ -1,0 +1,21 @@
+<% include ../partials/header %>
+
+    <div class="container text-center">
+        <header class="jumbotron p-5 text-center">
+            <h1><%= spot.name %></h1>
+            <h5><%= spot.description %></h5>
+        </header>
+
+        <div class="card">
+            <img src="<%= spot.image %>" class="card-img-top" alt="<%= spot.name %>">
+            <div class="card-body">
+                <p class="card-text">
+                    <% spot.reviews.forEach((review) => { %>
+                        <p>"<%= review.text %>" - <%= review.author %></p>
+                    <% }) %>
+                </p>
+            </div>
+        </div>
+    </div>
+
+<% include ../partials/footer %>
