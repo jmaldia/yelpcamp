@@ -10,7 +10,7 @@ let app = express();
 // connect to mongo db
 mongoose.connect("mongodb://localhost:27017/neighborhood_spots", {useNewUrlParser: true, useUnifiedTopology: true});
 
-seedDB();
+// seedDB();
 
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({extended: true}));
@@ -89,6 +89,25 @@ app.get("/spots/:id/reviews/new", (req, res) => {
             res.render("reviews/new", { spot: spot });
         }
     }) 
+});
+// Post route to add new comment
+app.post("/spots/:id/reviews", (req, res) => {
+   Spot.findById(req.params.id, (err, spot) => {
+        if (err) {
+            console.log(err);
+        } else {
+            console.log(req.body.review);
+            Review.create(req.body.review, (err, review) => {
+                if (err) {
+                    console.log(err);
+                } else {
+                    spot.reviews.push(review);
+                    spot.save();
+                    res.redirect(`/spots/${spot._id}`)
+                }
+            })
+        }
+    });
 });
 
 

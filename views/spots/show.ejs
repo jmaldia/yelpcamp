@@ -6,7 +6,7 @@
             <h5><%= spot.description %></h5>
         </header>
 
-        <div class="card">
+        <div class="card center">
             <img src="<%= spot.image %>" class="card-img-top" alt="<%= spot.name %>">
             <div class="card-body">
                 <p class="card-text">
@@ -14,7 +14,9 @@
                         <p>"<%= review.text %>" - <%= review.author %></p>
                     <% }) %>
                 </p>
+                <a href="/spots/<%= spot._id %>/reviews/new" class="btn btn-primary">Add a Review</a>
             </div>
+            
         </div>
     </div>
 
