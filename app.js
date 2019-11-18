@@ -127,6 +127,11 @@ app.post("/spots/:id/reviews", (req, res) => {
     });
 });
 
+// Auth Routes
+app.get("/register", (req, res) => {
+    res.render("authenticate/register");
+})
+
 
 // Tell express to listen for requests -start server 
 // start your app with this command: PORT=3000 node app.js
