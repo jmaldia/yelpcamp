@@ -20,6 +20,18 @@ app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static(__dirname+"/public"));
 
+// PASSPORT CONFIGURATION
+app.use(require("express-session")({
+    secret: "Once again I win cutest person!",
+    resave: false, 
+    saveUninitialized: false
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
 // EXPRESS ROUTES
 app.get("/", (req, res) => {
     res.render("home");
