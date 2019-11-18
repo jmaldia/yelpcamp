@@ -1,10 +1,14 @@
-let express     = require("express");
-let bodyParser  = require("body-parser");
-let mongoose    = require("mongoose");
+let express         = require("express");
+let bodyParser      = require("body-parser");
+let mongoose        = require("mongoose");
+// Authentication
+let passport        = require('passport');
+let LocalStrategy   = require('passport-local');
 // require the model File(s)
-let Spot        = require("./models/spots");
-let Review      = require("./models/reviews");
-let seedDB      = require("./seeds"); // Seed file
+let Spot            = require("./models/spots");
+let Review          = require("./models/reviews");
+let User            = require("./models/user");
+let seedDB          = require("./seeds"); // Seed file
 // run server
 let app = express();
 // connect to mongo db
