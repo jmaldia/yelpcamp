@@ -32,6 +32,11 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+app.use((req, res, next) => {
+    res.locals.currentUser = req.user;
+    next();
+});
+
 let isLoggedIn = (req, res, next) => {
     if(req.isAuthenticated()){
         return next();
@@ -46,12 +51,13 @@ app.get("/", (req, res) => {
 });
 
 app.get("/spots", (req, res) => {
+
     // Get campgrounds from DB
     Spot.find({}, (err, allSpots) => {
         if (err) {
             console.log("OH NO, ERROR!");
         } else {
-            res.render("spots/spots", { spots: allSpots });
+            res.render("spots/spots", { spots: allSpots, currentUser: req.user });
             console.log(allSpots);
         }
     });
