@@ -32,6 +32,14 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+let isLoggedIn = (req, res, next) => {
+    if(req.isAuthenticated()){
+        return next();
+    };
+    res.redirect("/login")
+}
+
+
 // EXPRESS ROUTES
 app.get("/", (req, res) => {
     res.render("home");
@@ -61,7 +69,7 @@ app.post("/spots", (req, res) => {
     }
 
     // Create new campground on DB
-    Spot.create(newSpot, (err, newlyCreatedSpot) => {
+    Spot.create(newSpot, isLoggedIn, (err, newlyCreatedSpot) => {
             if (err) {
                 console.log("SOMETHING WENT WRONG!", err);
             } else {
@@ -74,7 +82,7 @@ app.post("/spots", (req, res) => {
     // campgrounds.push({ name: name, image: image }); - old code
 });
 
-app.get("/spots/new", (req, res) => {
+app.get("/spots/new", isLoggedIn, (req, res) => {
     res.render("spots/new")
 });
 
@@ -98,7 +106,7 @@ app.get("/spots/:id", (req, res) => {
 // ==============
 
 // Review Routes - form
-app.get("/spots/:id/reviews/new", (req, res) => {
+app.get("/spots/:id/reviews/new", isLoggedIn, (req, res) => {
     Spot.findById(req.params.id, (err, spot) => {
         if (err) {
             console.log(err);
@@ -114,7 +122,7 @@ app.post("/spots/:id/reviews", (req, res) => {
             console.log(err);
         } else {
             console.log(req.body.review);
-            Review.create(req.body.review, (err, review) => {
+            Review.create(req.body.review, isLoggedIn, (err, review) => {
                 if (err) {
                     console.log(err);
                 } else {
@@ -154,13 +162,21 @@ app.post("/register", (req, res) => {
 app.get("/login", (req, res) => {
     res.render("authenticate/login");
 });
-// handle sign up logic
+// handle login logic
 app.post("/login", passport.authenticate("local", 
     {
         successRedirect: "/spots",
         failureRedirect: "/login"
     }), (req, res) => {
     });
+
+// log out route
+app.get("/logout", (req,res) => {
+    req.logout();
+    res.redirect("/login");
+})
+
+
 
 // Tell express to listen for requests -start server 
 // start your app with this command: PORT=3000 node app.js
