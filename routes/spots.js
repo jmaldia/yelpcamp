@@ -1,0 +1,68 @@
+let express = require("express");
+let router  = express.Router();
+// Models
+let Spot    = require("../models/spots");
+
+// middleware
+let isLoggedIn = (req, res, next) => {
+    if(req.isAuthenticated()){
+        return next();
+    };
+    res.redirect("/login")
+}
+
+// show all spots
+router.get("/", (req, res) => {
+    // Get campgrounds from DB
+    Spot.find({}, (err, allSpots) => {
+        if (err) {
+            console.log("OH NO, ERROR!", err);
+        } else {
+            res.render("spots/spots", { spots: allSpots, currentUser: req.user });
+            console.log(allSpots);
+        }
+    });
+});
+// Post route to add new campground
+router.post("/", isLoggedIn, (req, res) => {
+    let name = req.body.name;
+    let image = req.body.image;
+    let description = req.body.description;
+    let newSpot = {
+        name: name, 
+        image: image,
+        description: description
+    }
+    // Create new campground on DB
+    Spot.create(newSpot, (err, newlyCreatedSpot) => {
+            if (err) {
+                console.log("SOMETHING WENT WRONG!", err);
+            } else {
+                console.log("WE JUST CREATED A SPOT ON THE DB!");
+                // console.log(newlyCreatedSpot);
+                res.redirect("/spots");
+            }
+        });
+
+    // campgrounds.push({ name: name, image: image }); - old code
+});
+// show new spot form
+router.get("/new", isLoggedIn, (req, res) => {
+    res.render("new")
+});
+// show spot detail
+router.get("/:id", (req, res) => {
+    let id = req.params.id;
+    console.log(id)
+    Spot.findById(req.params.id).populate("reviews").exec((err, foundSpot) => {
+        if (err) {
+            console.log("SOMETHING WENT WRONG!", err);
+        } else {
+            console.log(foundSpot)
+            res.render("spots/show", { spot: foundSpot });
+        }
+    });
+    // res.render("show", { id: id })
+});
+
+module.exports = router;

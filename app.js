@@ -4,7 +4,11 @@ let mongoose        = require("mongoose");
 // Authentication
 let passport        = require('passport');
 let LocalStrategy   = require('passport-local');
-// require the model File(s)
+// Routes
+let spotRoutes      = require("./routes/spots");
+let reviewRoutes      = require("./routes/reviews");
+let authRoutes      = require("./routes/auth");
+// Model File(s)
 let Spot            = require("./models/spots");
 let Review          = require("./models/reviews");
 let User            = require("./models/user");
@@ -37,151 +41,12 @@ app.use((req, res, next) => {
     next();
 });
 
-let isLoggedIn = (req, res, next) => {
-    if(req.isAuthenticated()){
-        return next();
-    };
-    res.redirect("/login")
-}
-
+// Use the Routes
+app.use(authRoutes);
+app.use("/spots", spotRoutes);
+app.use("/spots/:id/reviews", reviewRoutes);
 
 // EXPRESS ROUTES
-app.get("/", (req, res) => {
-    res.render("home");
-});
-
-app.get("/spots", (req, res) => {
-
-    // Get campgrounds from DB
-    Spot.find({}, (err, allSpots) => {
-        if (err) {
-            console.log("OH NO, ERROR!");
-        } else {
-            res.render("spots/spots", { spots: allSpots, currentUser: req.user });
-            console.log(allSpots);
-        }
-    });
-});
-
-// Post route to add new campground
-app.post("/spots", (req, res) => {
-    let name = req.body.name;
-    let image = req.body.image;
-    let description = req.body.description;
-    let newSpot = {
-        name: name, 
-        image: image,
-        description: description
-    }
-
-    // Create new campground on DB
-    Spot.create(newSpot, isLoggedIn, (err, newlyCreatedSpot) => {
-            if (err) {
-                console.log("SOMETHING WENT WRONG!", err);
-            } else {
-                console.log("WE JUST CREATED A SPOT ON THE DB!");
-                console.log(newlyCreatedSpot);
-                res.redirect("/spots");
-            }
-        });
-
-    // campgrounds.push({ name: name, image: image }); - old code
-});
-
-app.get("/spots/new", isLoggedIn, (req, res) => {
-    res.render("spots/new")
-});
-
-app.get("/spots/:id", (req, res) => {
-    let id = req.params.id;
-    console.log(id)
-    Spot.findById(req.params.id).populate("reviews").exec((err, foundSpot) => {
-        if (err) {
-            console.log("SOMETHING WENT WRONG!", err);
-        } else {
-            console.log(foundSpot)
-            res.render("spots/show", { spot: foundSpot });
-        }
-    });
-    // res.render("show", { id: id })
-});
-
-
-// ============== 
-// REVIEWS
-// ==============
-
-// Review Routes - form
-app.get("/spots/:id/reviews/new", isLoggedIn, (req, res) => {
-    Spot.findById(req.params.id, (err, spot) => {
-        if (err) {
-            console.log(err);
-        } else {
-            res.render("reviews/new", { spot: spot });
-        }
-    }) 
-});
-// Post route to add new comment
-app.post("/spots/:id/reviews", (req, res) => {
-   Spot.findById(req.params.id, (err, spot) => {
-        if (err) {
-            console.log(err);
-        } else {
-            console.log(req.body.review);
-            Review.create(req.body.review, isLoggedIn, (err, review) => {
-                if (err) {
-                    console.log(err);
-                } else {
-                    spot.reviews.push(review);
-                    spot.save();
-                    res.redirect(`/spots/${spot._id}`)
-                }
-            })
-        }
-    });
-});
-
-// ============== 
-// AUTHENTICATION ROUTES
-// ==============
-
-// register form
-app.get("/register", (req, res) => {
-    res.render("authenticate/register");
-});
-// handle sign up logic
-app.post("/register", (req, res) => {
-    let newUser = new User({ username: req.body.username });
-
-    User.register(newUser, req.body.password, (err, user) => {
-        if(err) {
-            console.log(err);
-            return res.render("authenticate/register");
-        }
-        passport.authenticate("local")(req, res, () => {
-            res.redirect("/spots");
-        });
-    });
-})
-
-// login form
-app.get("/login", (req, res) => {
-    res.render("authenticate/login");
-});
-// handle login logic
-app.post("/login", passport.authenticate("local", 
-    {
-        successRedirect: "/spots",
-        failureRedirect: "/login"
-    }), (req, res) => {
-    });
-
-// log out route
-app.get("/logout", (req,res) => {
-    req.logout();
-    res.redirect("/login");
-})
-
 
 
 // Tell express to listen for requests -start server 
