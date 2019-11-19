@@ -28,7 +28,9 @@ router.post("/", isLoggedIn, (req, res) => {
         if (err) {
             console.log(err);
         } else {
-            // console.log(req.body.review);
+            // add username and id to comment
+            req.user;
+            // save comment
             Review.create(req.body.review, (err, review) => {
                 if (err) {
                     console.log(err);
