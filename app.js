@@ -9,22 +9,23 @@ let spotRoutes      = require("./routes/spots");
 let reviewRoutes      = require("./routes/reviews");
 let authRoutes      = require("./routes/auth");
 // Model File(s)
-let Spot            = require("./models/spots");
-let Review          = require("./models/reviews");
+// let Spot            = require("./models/spots");
+// let Review          = require("./models/reviews");
 let User            = require("./models/user");
-let seedDB          = require("./seeds"); // Seed file
-// run server
+// Run server
 let app = express();
-// connect to mongo db
+// Connect to mongo db
 mongoose.connect("mongodb://localhost:27017/neighborhood_spots", {useNewUrlParser: true, useUnifiedTopology: true});
 
+// Seeding the database
+// let seedDB          = require("./seeds"); // Seed file
 // seedDB();
 
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static(__dirname+"/public"));
 
-// PASSPORT CONFIGURATION
+// Passport configuration
 app.use(require("express-session")({
     secret: "Once again I win cutest person!",
     resave: false, 
@@ -45,9 +46,6 @@ app.use((req, res, next) => {
 app.use(authRoutes);
 app.use("/spots", spotRoutes);
 app.use("/spots/:id/reviews", reviewRoutes);
-
-// EXPRESS ROUTES
-
 
 // Tell express to listen for requests -start server 
 // start your app with this command: PORT=3000 node app.js

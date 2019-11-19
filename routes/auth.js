@@ -5,7 +5,7 @@ let passport    = require('passport');
 // MOdels
 let User        = require("../models/user");
 
-// middleware
+// Middleware
 let isLoggedIn = (req, res, next) => {
     if(req.isAuthenticated()){
         return next();
@@ -13,15 +13,15 @@ let isLoggedIn = (req, res, next) => {
     res.redirect("/login")
 }
 
-// root route
+// Root route
 router.get("/", (req, res) => {
     res.render("home");
 });
-// register form
+// Register form
 router.get("/register", (req, res) => {
     res.render("authenticate/register");
 });
-// handle sign up logic
+// Handle sign up logic
 router.post("/register", (req, res) => {
     let newUser = new User({ username: req.body.username });
 
@@ -35,11 +35,11 @@ router.post("/register", (req, res) => {
         });
     });
 })
-// login form
+// Login form
 router.get("/login", (req, res) => {
     res.render("authenticate/login");
 });
-// handle login logic
+// Handle login logic
 router.post("/login", passport.authenticate("local", 
     {
         successRedirect: "/spots",
@@ -47,7 +47,7 @@ router.post("/login", passport.authenticate("local",
     }), (req, res) => {
     });
 
-// log out route
+// Log out route
 router.get("/logout", (req,res) => {
     req.logout();
     res.redirect("/login");

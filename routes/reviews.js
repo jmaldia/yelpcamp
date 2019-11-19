@@ -4,6 +4,7 @@ let router  = express.Router({mergeParams: true});
 let Spot    = require("../models/spots");
 let Review    = require("../models/reviews");
 
+// Middleware
 let isLoggedIn = (req, res, next) => {
     if(req.isAuthenticated()){
         return next();
@@ -11,11 +12,7 @@ let isLoggedIn = (req, res, next) => {
     res.redirect("/login")
 }
 
-// ============== 
-// REVIEWS
-// ==============
-
-// Review Routes - form
+// Show new review form
 router.get("/new", isLoggedIn, (req, res) => {
     Spot.findById(req.params.id, (err, spot) => {
         if (err) {
@@ -25,7 +22,7 @@ router.get("/new", isLoggedIn, (req, res) => {
         }
     }) 
 });
-// Post route to add new comment
+// Post route to add new review
 router.post("/", isLoggedIn, (req, res) => {
    Spot.findById(req.params.id, (err, spot) => {
         if (err) {

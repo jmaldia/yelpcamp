@@ -3,7 +3,7 @@ let router  = express.Router();
 // Models
 let Spot    = require("../models/spots");
 
-// middleware
+// Middleware
 let isLoggedIn = (req, res, next) => {
     if(req.isAuthenticated()){
         return next();
@@ -11,7 +11,7 @@ let isLoggedIn = (req, res, next) => {
     res.redirect("/login")
 }
 
-// show all spots
+// Show all spots
 router.get("/", (req, res) => {
     // Get campgrounds from DB
     Spot.find({}, (err, allSpots) => {
@@ -46,11 +46,11 @@ router.post("/", isLoggedIn, (req, res) => {
 
     // campgrounds.push({ name: name, image: image }); - old code
 });
-// show new spot form
+// Show new spot form
 router.get("/new", isLoggedIn, (req, res) => {
     res.render("new")
 });
-// show spot detail
+// Show spot detail
 router.get("/:id", (req, res) => {
     let id = req.params.id;
     console.log(id)
