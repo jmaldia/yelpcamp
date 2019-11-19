@@ -127,11 +127,40 @@ app.post("/spots/:id/reviews", (req, res) => {
     });
 });
 
-// Auth Routes
+// ============== 
+// AUTHENTICATION ROUTES
+// ==============
+
+// register form
 app.get("/register", (req, res) => {
     res.render("authenticate/register");
+});
+// handle sign up logic
+app.post("/register", (req, res) => {
+    let newUser = new User({ username: req.body.username });
+
+    User.register(newUser, req.body.password, (err, user) => {
+        if(err) {
+            console.log(err);
+            return res.render("authenticate/register");
+        }
+        passport.authenticate("local")(req, res, () => {
+            res.redirect("/spots");
+        });
+    });
 })
 
+// login form
+app.get("/login", (req, res) => {
+    res.render("authenticate/login");
+});
+// handle sign up logic
+app.post("/login", passport.authenticate("local", 
+    {
+        successRedirect: "/spots",
+        failureRedirect: "/login"
+    }), (req, res) => {
+    });
 
 // Tell express to listen for requests -start server 
 // start your app with this command: PORT=3000 node app.js
