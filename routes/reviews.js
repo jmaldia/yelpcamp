@@ -28,16 +28,20 @@ router.post("/", isLoggedIn, (req, res) => {
         if (err) {
             console.log(err);
         } else {
-            // add username and id to comment
-            req.user;
-            // save comment
             Review.create(req.body.review, (err, review) => {
                 if (err) {
                     console.log(err);
                 } else {
+                    // add username and id to review
+                    review.author.id = req.user._id;
+                    review.author.username = req.user.username;
+                    // save review
+                    review.save();
                     spot.reviews.push(review);
                     spot.save();
-                    res.redirect(`/spots/${spot._id}`)
+                    setTimeout(() => {
+                        res.redirect(`/spots/${spot._id}`)
+                    }, 0);
                 }
             })
         }
