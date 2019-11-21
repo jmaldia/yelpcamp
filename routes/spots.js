@@ -28,10 +28,15 @@ router.post("/", isLoggedIn, (req, res) => {
     let name = req.body.name;
     let image = req.body.image;
     let description = req.body.description;
+    let author = {
+        id: req.user._id,
+        username: req.user.username
+    };
     let newSpot = {
         name: name, 
         image: image,
-        description: description
+        description: description, 
+        author: author
     }
     // Create new campground on DB
     Spot.create(newSpot, (err, newlyCreatedSpot) => {
