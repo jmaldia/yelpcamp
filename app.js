@@ -50,7 +50,7 @@ app.use("/spots", spotRoutes);
 app.use("/spots/:id/reviews", reviewRoutes);
 
 // Tell express to listen for requests -start server 
-// start your app with this command: PORT=3000 node app.js
+// start your app with this command: PORT=3001 nodemon app.js
 app.listen(process.env.PORT, process.env.IP, () =>{
     console.log("Yelp Camp Server has started");
 });

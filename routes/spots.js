@@ -69,5 +69,16 @@ router.get("/:id", (req, res) => {
     });
     // res.render("show", { id: id })
 });
+// Edit spot
+router.get("/:id/edit", (req,res) => {
+    Spot.findById(req.params.id, (err, foundSpot) => {
+        if(err) {
+            res.redirect("/spots");
+        } else {
+            res.render("spots/edit", {spot: foundSpot});
+        }
+    });
+});
+// Update spot 
 
 module.exports = router;
