@@ -5,8 +5,9 @@ let mongoose        = require("mongoose");
 let passport        = require('passport');
 let LocalStrategy   = require('passport-local');
 // Routes
+let methodOverride  = require("method-override");
 let spotRoutes      = require("./routes/spots");
-let reviewRoutes      = require("./routes/reviews");
+let reviewRoutes    = require("./routes/reviews");
 let authRoutes      = require("./routes/auth");
 // Model File(s)
 // let Spot            = require("./models/spots");
@@ -24,6 +25,7 @@ mongoose.connect("mongodb://localhost:27017/neighborhood_spots", {useNewUrlParse
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static(__dirname+"/public"));
+app.use(methodOverride("_method"));
 
 // Passport configuration
 app.use(require("express-session")({
