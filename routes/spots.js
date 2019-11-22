@@ -53,7 +53,7 @@ router.post("/", isLoggedIn, (req, res) => {
 });
 // Show new spot form
 router.get("/new", isLoggedIn, (req, res) => {
-    res.render("new")
+    res.render("spots/new")
 });
 // Show spot detail
 router.get("/:id", (req, res) => {
