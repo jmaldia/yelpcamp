@@ -80,5 +80,14 @@ router.get("/:id/edit", (req,res) => {
     });
 });
 // Update spot 
+router.put("/:id", (req, res) => {
+    Spot.findByIdAndUpdate(req.params.id, req.body.spot, (err, updatedSpot) => {
+        if(err) {
+            res.redirect("/spots");
+        } else {
+            res.redirect(`/spots/${req.params.id}`)
+        }
+    })
+});
 
 module.exports = router;
