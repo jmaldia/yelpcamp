@@ -26,14 +26,14 @@
                     <p class="card-text text-muted">
                         <em>Submitted by: <%= spot.author.username %></em>
                     </p>
-                    <a class="btn btn-warning" href="/spots/<%= spot._id %>/edit">Edit</a>
-                    <form action="/spots/<%= spot._id %>?_method=DELETE" method="POST">
-                        <button class="btn btn-danger">Delete</button>
+                    <a class="btn btn-sm btn-outline-warning" href="/spots/<%= spot._id %>/edit">Edit</a>
+                    <form id="delete-form" action="/spots/<%= spot._id %>?_method=DELETE" method="POST">
+                        <button class="btn btn-sm btn-outline-danger">Delete</button>
                     </form>
                     
                     <div class="well">
                         <div class="text-right">
-                            <a href="/spots/<%= spot._id %>/reviews/new" class="btn btn-primary">Add a Review</a>
+                            <a href="/spots/<%= spot._id %>/reviews/new" class="btn btn-block btn-info mt-5">Add a Review</a>
                         </div>
                         <hr>
                         <% spot.reviews.forEach((review) => { %>
