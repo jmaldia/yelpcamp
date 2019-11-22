@@ -89,5 +89,15 @@ router.put("/:id", (req, res) => {
         }
     })
 });
+// Destroy spot
+router.delete("/:id", (req, res) => {
+    Spot.findByIdAndRemove(req.params.id, (err) => {
+        if(err) {
+            res.redirect("/spots");
+        } else {
+            res.redirect("/spots");
+        }
+    });
+});
 
 module.exports = router;
