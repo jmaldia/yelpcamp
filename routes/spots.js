@@ -2,6 +2,7 @@ let express = require("express");
 let router  = express.Router();
 // Models
 let Spot    = require("../models/spots");
+let Review    = require("../models/reviews");
 
 // Middleware
 let isLoggedIn = (req, res, next) => {
@@ -95,6 +96,12 @@ router.delete("/:id", (req, res) => {
         if(err) {
             res.redirect("/spots");
         } else {
+            // Review.deleteMany({_id: { $in: spotRemoved.reviews } }, (err) => {
+            //     if (err) {
+            //         console.log(err);
+            //     }
+            //     res.redirect("/spots");
+            // });
             res.redirect("/spots");
         }
     });

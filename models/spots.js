@@ -1,5 +1,15 @@
 let mongoose    = require("mongoose");
 
+// let Review      = require("reviews");
+
+// SpotSchema.pre('remove', async function() {
+// 	await Review.remove({
+// 		_id: {
+// 			$in: this.reviews
+// 		}
+// 	});
+// });
+
 // SCHEMA SETUP
 let spotSchema = new mongoose.Schema({
     name        : String,
