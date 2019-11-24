@@ -72,13 +72,22 @@ router.get("/:id", (req, res) => {
 });
 // Edit spot
 router.get("/:id/edit", (req,res) => {
-    Spot.findById(req.params.id, (err, foundSpot) => {
-        if(err) {
-            res.redirect("/spots");
-        } else {
-            res.render("spots/edit", {spot: foundSpot});
-        }
-    });
+    if(req.isAuthenticated()) {
+
+        Spot.findById(req.params.id, (err, foundSpot) => {
+            if(err) {
+                res.redirect("/spots");
+            } else {
+                if (foundSpot.author.id.equals(req.user._id)) {
+                    res.render("spots/edit", {spot: foundSpot});
+                } else {
+                    res.send("You don't have permission to do that");
+                }
+            }
+        });
+    } else {
+        res.send("You need to be logged in");
+    }
 });
 // Update spot 
 router.put("/:id", (req, res) => {
