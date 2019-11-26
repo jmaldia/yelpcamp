@@ -41,7 +41,7 @@ router.post("/", isLoggedIn, (req, res) => {
                     spot.save();
                     setTimeout(() => {
                         res.redirect(`/spots/${spot._id}`)
-                    }, 0);
+                    }, 50);
                 }
             })
         }
