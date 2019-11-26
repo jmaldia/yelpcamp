@@ -12,6 +12,24 @@ let isLoggedIn = (req, res, next) => {
     res.redirect("/login")
 }
 
+let checkSpotOwnership = (req, res, next) => {
+    if(req.isAuthenticated()) {
+        Spot.findById(req.params.id, (err, foundSpot) => {
+            if(err) {
+                res.redirect("back");
+            } else {
+                if (foundSpot.author.id.equals(req.user._id)) {
+                    next();
+                } else {
+                    res.redirect("back");
+                }
+            }
+        });
+    } else {
+        res.redirect("back");
+    };
+};
+
 // Show all spots
 router.get("/", (req, res) => {
     // Get campgrounds from DB
@@ -71,23 +89,10 @@ router.get("/:id", (req, res) => {
     // res.render("show", { id: id })
 });
 // Edit spot
-router.get("/:id/edit", (req,res) => {
-    if(req.isAuthenticated()) {
-
-        Spot.findById(req.params.id, (err, foundSpot) => {
-            if(err) {
-                res.redirect("/spots");
-            } else {
-                if (foundSpot.author.id.equals(req.user._id)) {
-                    res.render("spots/edit", {spot: foundSpot});
-                } else {
-                    res.send("You don't have permission to do that");
-                }
-            }
-        });
-    } else {
-        res.send("You need to be logged in");
-    }
+router.get("/:id/edit", checkSpotOwnership, (req,res) => {
+    Spot.findById(req.params.id, (err, foundSpot) => {
+        res.render("spots/edit", {spot: foundSpot});
+    });
 });
 // Update spot 
 router.put("/:id", (req, res) => {
