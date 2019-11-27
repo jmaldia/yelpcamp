@@ -47,5 +47,11 @@ router.post("/", isLoggedIn, (req, res) => {
         }
     });
 });
+// Edit post
+router.put("/:review_id/edit", (req, res) => {
+    Spot.findById(req.params.id, (err, foundSpot) => {
+        res.render("spots/edit", {spot: foundSpot});
+    });
+});
 
 module.exports = router;
