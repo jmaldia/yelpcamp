@@ -81,7 +81,7 @@ router.get("/new", isLoggedIn, (req, res) => {
 // Show spot detail
 router.get("/:id", (req, res) => {
     let id = req.params.id;
-    console.log(id)
+    // console.log(id)
     Spot.findById(req.params.id).populate("reviews").exec((err, foundSpot) => {
         if (err) {
             console.log("SOMETHING WENT WRONG!", err);
