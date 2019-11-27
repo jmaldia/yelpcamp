@@ -49,16 +49,17 @@ router.post("/", isLoggedIn, (req, res) => {
 });
 // Edit post
 router.get("/:review_id/edit", (req, res) => {
-    Review.findById(req.params.review_id), (err, foundReview) => {
+    Review.findById(req.params.review_id, (err, foundReview) => {
         if(err) {
             res.redirect("back");
         } else {
-            res.render("reviews/edit", {spot_id: req.params.id, comment: foundReview});
+            res.render("reviews/edit", {spot_id: req.params.id, review: foundReview});
         }
-    }
+    });
     // Spot.findById(req.params.id, (err, foundSpot) => {
     //     res.render("spots/edit", {spot: foundSpot});
     // });
 });
+// Update route for edit
 
 module.exports = router;
