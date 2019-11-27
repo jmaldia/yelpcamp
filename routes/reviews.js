@@ -61,5 +61,16 @@ router.get("/:review_id/edit", (req, res) => {
     // });
 });
 // Update route for edit
+router.put("/:review_id", (req, res) => {
+    console.log(req.body.review)
+    Review.findByIdAndUpdate(req.params.review_id, req.body.review, (err, updatedReview) => {
+        if(err) {
+            res.redirect("back");
+        } else {
+            res.redirect(`/spots/${req.params.id}`);
+        }
+    })
+});
+
 
 module.exports = router;
