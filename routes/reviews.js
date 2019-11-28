@@ -71,6 +71,16 @@ router.put("/:review_id", (req, res) => {
         }
     })
 });
+// Delete review
+router.delete("/:review_id", (req, res) => {
+    Review.findByIdAndRemove(req.params.review_id, (err) => {
+        if(err) {
+            res.redirect("back");
+        } else {
+            res.redirect(`/spots/${req.params.id}`);
+        }
+    })
+})
 
 
 module.exports = router;
