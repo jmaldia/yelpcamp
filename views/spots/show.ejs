@@ -50,12 +50,14 @@
                                             <%= review.text %>
                                         </em>
                                     </p>
-                                    <a href="/spots/<%= spot._id %>/reviews/<%= review._id %>/edit" class="btn btn-sm btn-outline-warning mb-4">
-                                        Edit
-                                    </a>
-                                    <form id="delete-form" action="/spots/<%= spot._id %>/reviews/<%= review._id %>?_method=DELETE" method="POST">
-                                        <button class="btn btn-sm btn-outline-danger mb-4">Delete</button>
-                                    </form>
+                                    <% if(currentUser && review.author.id && review.author.id.equals(currentUser._id)) {  %>
+                                        <a href="/spots/<%= spot._id %>/reviews/<%= review._id %>/edit" class="btn btn-sm btn-outline-warning mb-4">
+                                            Edit
+                                        </a>
+                                        <form id="delete-form" action="/spots/<%= spot._id %>/reviews/<%= review._id %>?_method=DELETE" method="POST">
+                                            <button class="btn btn-sm btn-outline-danger mb-4">Delete</button>
+                                        </form>
+                                    <% }  %>
                                 </div>
                             </div>
                         <% }) %>
