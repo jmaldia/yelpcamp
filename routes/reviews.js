@@ -1,41 +1,13 @@
-let express = require("express");
-let router  = express.Router({mergeParams: true});
+let express     = require("express");
+let router      = express.Router({mergeParams: true});
 // Models
-let Spot    = require("../models/spots");
-let Review    = require("../models/reviews");
-
+let Spot        = require("../models/spots");
+let Review      = require("../models/reviews");
 // Middleware
-let isLoggedIn = (req, res, next) => {
-    if(req.isAuthenticated()){
-        return next();
-    };
-    res.redirect("/login")
-}
-
-let checkReviewOwnership = (req, res, next) => {
-    if(req.isAuthenticated()) {
-        Review.findById(req.params.review_id, (err, foundReview) => {
-            if(err) {
-                res.redirect("back");
-            } else {
-                if (foundReview.author.id) {
-                    if (foundReview.author.id.equals(req.user._id)) {
-                        next();
-                    } else {
-                        res.redirect("back");
-                    }
-                } else {
-                    res.redirect("back");
-                }
-            }
-        });
-    } else {
-        res.redirect("back");
-    };
-};
+let middleWare  = require("../middleware");
 
 // Show new review form
-router.get("/new", isLoggedIn, (req, res) => {
+router.get("/new", middleWare.isLoggedIn, (req, res) => {
     Spot.findById(req.params.id, (err, spot) => {
         if (err) {
             console.log(err);
@@ -45,7 +17,7 @@ router.get("/new", isLoggedIn, (req, res) => {
     }) 
 });
 // Post route to add new review
-router.post("/", isLoggedIn, (req, res) => {
+router.post("/", middleWare.isLoggedIn, (req, res) => {
    Spot.findById(req.params.id, (err, spot) => {
         if (err) {
             console.log(err);
@@ -70,7 +42,7 @@ router.post("/", isLoggedIn, (req, res) => {
     });
 });
 // Edit post
-router.get("/:review_id/edit", checkReviewOwnership, (req, res) => {
+router.get("/:review_id/edit", middleWare.checkReviewOwnership, (req, res) => {
     Review.findById(req.params.review_id, (err, foundReview) => {
         if(err) {
             res.redirect("back");
@@ -83,7 +55,7 @@ router.get("/:review_id/edit", checkReviewOwnership, (req, res) => {
     // });
 });
 // Update route for edit
-router.put("/:review_id", checkReviewOwnership, (req, res) => {
+router.put("/:review_id", middleWare.checkReviewOwnership, (req, res) => {
     console.log(req.body.review)
     Review.findByIdAndUpdate(req.params.review_id, req.body.review, (err, updatedReview) => {
         if(err) {
@@ -94,7 +66,7 @@ router.put("/:review_id", checkReviewOwnership, (req, res) => {
     })
 });
 // Delete review
-router.delete("/:review_id", checkReviewOwnership, (req, res) => {
+router.delete("/:review_id", middleWare.checkReviewOwnership, (req, res) => {
     Review.findByIdAndRemove(req.params.review_id, (err) => {
         if(err) {
             res.redirect("back");

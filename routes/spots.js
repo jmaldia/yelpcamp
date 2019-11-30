@@ -1,38 +1,10 @@
-let express = require("express");
-let router  = express.Router();
+let express     = require("express");
+let router      = express.Router();
 // Models
-let Spot    = require("../models/spots");
-let Review    = require("../models/reviews");
-
+let Spot        = require("../models/spots");
+let Review      = require("../models/reviews");
 // Middleware
-let isLoggedIn = (req, res, next) => {
-    if(req.isAuthenticated()){
-        return next();
-    };
-    res.redirect("/login")
-}
-
-let checkSpotOwnership = (req, res, next) => {
-    if(req.isAuthenticated()) {
-        Spot.findById(req.params.id, (err, foundSpot) => {
-            if(err) {
-                res.redirect("back");
-            } else {
-                if (foundSpot.author.id) {
-                    if (foundSpot.author.id.equals(req.user._id)) {
-                        next();
-                    } else {
-                        res.redirect("back");
-                    }
-                } else {
-                    res.redirect("back");
-                }
-            }
-        });
-    } else {
-        res.redirect("back");
-    };
-};
+let middleWare  = require("../middleware");
 
 // Show all spots
 router.get("/", (req, res) => {
@@ -47,7 +19,7 @@ router.get("/", (req, res) => {
     });
 });
 // Post route to add new campground
-router.post("/", isLoggedIn, (req, res) => {
+router.post("/", middleWare.isLoggedIn, (req, res) => {
     let name = req.body.name;
     let image = req.body.image;
     let description = req.body.description;
@@ -75,7 +47,7 @@ router.post("/", isLoggedIn, (req, res) => {
     // campgrounds.push({ name: name, image: image }); - old code
 });
 // Show new spot form
-router.get("/new", isLoggedIn, (req, res) => {
+router.get("/new", middleWare.isLoggedIn, (req, res) => {
     res.render("spots/new")
 });
 // Show spot detail
@@ -93,7 +65,7 @@ router.get("/:id", (req, res) => {
     // res.render("show", { id: id })
 });
 // Edit spot
-router.get("/:id/edit", checkSpotOwnership, (req,res) => {
+router.get("/:id/edit", middleWare.checkSpotOwnership, (req,res) => {
     Spot.findById(req.params.id, (err, foundSpot) => {
         res.render("spots/edit", {spot: foundSpot});
     });
