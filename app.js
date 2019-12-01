@@ -1,6 +1,7 @@
 let express         = require("express");
 let bodyParser      = require("body-parser");
 let mongoose        = require("mongoose");
+let flash            = require('connect-flash');
 // Authentication
 let passport        = require('passport');
 let LocalStrategy   = require('passport-local');
@@ -26,6 +27,7 @@ app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static(__dirname+"/public"));
 app.use(methodOverride("_method"));
+app.use(flash());
 
 // Passport configuration
 app.use(require("express-session")({
