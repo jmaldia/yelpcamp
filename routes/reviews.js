@@ -24,6 +24,7 @@ router.post("/", middleWare.isLoggedIn, (req, res) => {
         } else {
             Review.create(req.body.review, (err, review) => {
                 if (err) {
+                    req.flash("error", "Something went wrong.");
                     console.log(err);
                 } else {
                     // add username and id to review
@@ -33,6 +34,7 @@ router.post("/", middleWare.isLoggedIn, (req, res) => {
                     review.save();
                     spot.reviews.push(review);
                     spot.save();
+                    req.flash("success", "Successfully added review.");
                     setTimeout(() => {
                         res.redirect(`/spots/${spot._id}`)
                     }, 50);
@@ -70,6 +72,7 @@ router.delete("/:review_id", middleWare.checkReviewOwnership, (req, res) => {
         if(err) {
             res.redirect("back");
         } else {
+            req.flash("success", "Review deleted.");
             res.redirect(`/spots/${req.params.id}`);
         }
     })

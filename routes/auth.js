@@ -5,14 +5,6 @@ let passport    = require('passport');
 // MOdels
 let User        = require("../models/user");
 
-// Middleware
-let isLoggedIn = (req, res, next) => {
-    if(req.isAuthenticated()){
-        return next();
-    };
-    res.redirect("/login")
-}
-
 // Root route
 router.get("/", (req, res) => {
     res.render("home");
@@ -27,10 +19,11 @@ router.post("/register", (req, res) => {
 
     User.register(newUser, req.body.password, (err, user) => {
         if(err) {
-            console.log(err);
+            req.flash("error", `Uh. oh. Something happened: ${err}`);
             return res.render("authenticate/register");
         }
         passport.authenticate("local")(req, res, () => {
+            req.flash("success", `Welcome to Rutherford Spots ${user.username}`);
             res.redirect("/spots");
         });
     });
