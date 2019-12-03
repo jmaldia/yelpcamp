@@ -56,7 +56,6 @@ router.get("/:review_id/edit", middleWare.checkReviewOwnership, (req, res) => {
 });
 // Update route for edit
 router.put("/:review_id", middleWare.checkReviewOwnership, (req, res) => {
-    console.log(req.body.review)
     Review.findByIdAndUpdate(req.params.review_id, req.body.review, (err, updatedReview) => {
         if(err) {
             res.redirect("back");
