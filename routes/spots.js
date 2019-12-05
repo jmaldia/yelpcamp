@@ -21,6 +21,7 @@ router.get("/", (req, res) => {
 // Post route to add new campground
 router.post("/", middleWare.isLoggedIn, (req, res) => {
     let name = req.body.name;
+    let minimum = req.body.minimum;
     let image = req.body.image;
     let description = req.body.description;
     let author = {
@@ -29,6 +30,7 @@ router.post("/", middleWare.isLoggedIn, (req, res) => {
     };
     let newSpot = {
         name: name, 
+        minimum: minimum,
         image: image,
         description: description, 
         author: author

@@ -13,6 +13,7 @@ let mongoose    = require("mongoose");
 // SCHEMA SETUP
 let spotSchema = new mongoose.Schema({
     name        : String,
+    minimum     : String,
     image       : String, 
     description : String,
     reviews     : [ {

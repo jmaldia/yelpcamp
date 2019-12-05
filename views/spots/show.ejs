@@ -16,7 +16,8 @@
                 <div class="card">
                     <img src="<%= spot.image %>" class="card-img-top" alt="<%= spot.name %>">
                     <div class="card-body">
-
+                    
+                    <span class="float-right">Min Delivery: $<%= parseFloat(spot.minimum).toFixed(2) %></span>
                     <h5 class="card-title">
                         <%= spot.name %>
                     </h5>
