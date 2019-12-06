@@ -1,3 +1,9 @@
+/* CUSTOM BOOTSTRAP */
+.bg-dark, .btn-primary {
+    background-color: #011F50!important;
+    border: none;
+}
+
 #username {
     color: #555555;
 }
