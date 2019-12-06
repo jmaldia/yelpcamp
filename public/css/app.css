@@ -5,3 +5,21 @@
 #delete-form {
     display: inline;
 }
+
+#homepage-header {
+    margin-top: -1.5rem!important;
+    height: 96vh;
+    background: url('../img/cafe.jpg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+#homepage-header__text {
+    color: #ffffff;
+    line-height: 300%;
+}
+
+#homepage-header__text h1 {
+    font-size: 3.5rem;
+}
