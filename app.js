@@ -17,8 +17,9 @@ let User            = require("./models/user");
 // Run server
 let app = express();
 // Connect to mongo db
-mongoose.connect("mongodb://localhost:27017/neighborhood_spots", {useNewUrlParser: true, useUnifiedTopology: true});
-
+let databaseURL = process.env.DATABASEURL || "mongodb://localhost:27017/neighborhood_spots";
+mongoose.connect(databaseURL, {useNewUrlParser: true, useUnifiedTopology: true});
+console.log(databaseURL);
 // Seeding the database
 // let seedDB          = require("./seeds"); // Seed file
 // seedDB();
