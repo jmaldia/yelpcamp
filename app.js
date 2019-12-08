@@ -19,7 +19,7 @@ let app = express();
 // Connect to mongo db
 let databaseURL = process.env.DATABASEURL || "mongodb://localhost:27017/neighborhood_spots";
 mongoose.connect(databaseURL, {useNewUrlParser: true, useUnifiedTopology: true});
-console.log(databaseURL);
+
 // Seeding the database
 // let seedDB          = require("./seeds"); // Seed file
 // seedDB();
