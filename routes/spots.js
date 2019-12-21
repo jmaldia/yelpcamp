@@ -5,11 +5,18 @@ let Spot        = require("../models/spots");
 let Review      = require("../models/reviews");
 // Middleware
 let middleWare  = require("../middleware");
+// Additional Modules
+let fuzzySearch = require("fuzzy-search");
 
 // Show all spots
 router.get("/", (req, res) => {
     // Get campgrounds from DB
     Spot.find({}, (err, allSpots) => {
+        // const searcher = new fuzzySearch(allSpots, ['name', 'description'], {
+        //     caseSensitive: false,
+        // });
+        // const result = searcher.search('');
+
         if (err) {
             console.log("OH NO, ERROR!", err);
         } else {
