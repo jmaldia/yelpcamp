@@ -10,17 +10,31 @@ let fuzzySearch = require("fuzzy-search");
 
 // Show all spots
 router.get("/", (req, res) => {
+    let allSpotsArr = [
+        {
+            name: "Restaurant 1", 
+            description: "Restaurant 1 Description"
+        },
+        {
+            name: "Restaurant 2 Rutherford", 
+            description: "Restaurant 2 Description"
+        },
+        {
+            name: "Restaurant 3 Rutherford", 
+            description: "Restaurant 3 Description"
+        }
+    ]
     // Get campgrounds from DB
     Spot.find({}, (err, allSpots) => {
-        // const searcher = new fuzzySearch(allSpots, ['name', 'description'], {
-        //     caseSensitive: false,
-        // });
-        // const result = searcher.search('');
+        const searcher = new fuzzySearch(allSpots, ['name', 'description'], {
+            caseSensitive: false,
+        });
+        const result = searcher.search('pai');
 
         if (err) {
             console.log("OH NO, ERROR!", err);
         } else {
-            res.render("spots/spots", { spots: allSpots, currentUser: req.user });
+            res.render("spots/spots", { spots: result, currentUser: req.user });
             console.log(allSpots);
         }
     });
